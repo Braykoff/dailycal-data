@@ -1,31 +1,30 @@
-# Astro Starter Kit: Minimal
+# Daily Californian Data
 
-```sh
-npm create astro@latest -- --template minimal
-```
+Investigative stories, data analysis and graphics by The Daily Californian's Data Team.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Project Structure
 
-## 🚀 Project Structure
+The following directory structure is used for this project:
 
-Inside of your Astro project, you'll see the following folders and files:
+TODO
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+## Creating an Article
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+TODO
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+Article .mdx files expect the following frontmatter:
 
-Any static assets, like images, can be placed in the `public/` directory.
+| Key | Type | Description | Required |
+| :-- | :-- | :-- | :-- |
+| date | Date | The publish date of the article | ✔ |
+| title | String | The title of the article | ✔ |
+| byline | String[] | An array of the names of authors on the byline | ✔ |
+| featuredImage | Image | The featured (hero) image for the article | ✔ |
+| imageAttribution | String | An attribution (contribution line) for the featured image | ✔ |
+| aboutStory | String | Text that appears at the bottom of the story, in the "About Story" container | |
+| template | Astro File | The template .astro file to render your article into. If blank, the [default](./src/layouts/templates/default.astro) will be used. | |
 
-## 🧞 Commands
+## Commands
 
 All commands are run from the root of the project, from a terminal:
 
@@ -38,6 +37,5 @@ All commands are run from the root of the project, from a terminal:
 | `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `npm run astro -- --help` | Get help using the Astro CLI                     |
 
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## Contact
+The Data Department can be contacted at [projects@dailycal.org](mailto:projects@dailycal.org)

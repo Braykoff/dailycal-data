@@ -3,6 +3,19 @@ import PageLayout from "../layouts/PageLayout.astro";
 import circleLogo from "../assets/site/dclogo-circle.png";
 import { Image } from "astro:assets";
 import { Link } from "../components/Link";
+import { getCollection } from "astro:content";
+
+// Get articles, sorted by publish date
+const articles = (await getCollection("articles")).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+
+// Date formatter
+const dateFormat = new Intl.DateTimeFormat("en-US", {
+  month: "long",
+  day: "numeric",
+  year: "numeric",
+});
 ---
 
 <PageLayout>
@@ -21,20 +34,24 @@ import { Link } from "../components/Link";
 
     {/* Articles */}
     <div class="index">
-      <Link href="/article/xyz" className="articleCardLink">
-        <div class="articleCard">
-          {/* Date */}
-          <div class="date">April 16, 2026</div>
-          {/* Image */}
-          <Image
-            src={circleLogo}
-            alt="Featured image here"
-            class="featuredImage"
-          />
-          {/* Title */}
-          <div class="title">Title here</div>
-        </div>
-      </Link>
+      {
+        articles.map((article) => (
+          <Link href={`/article/${article.id}`} className="articleCardLink">
+            <div class="articleCard">
+              {/* Date */}
+              <div class="date">{dateFormat.format(article.data.date)}</div>
+              {/* Image */}
+              <Image
+                src={circleLogo}
+                alt="Featured image here"
+                class="featuredImage"
+              />
+              {/* Title */}
+              <div class="title">{article.data.title}</div>
+            </div>
+          </Link>
+        ))
+      }
     </div>
   </div>
 </PageLayout>

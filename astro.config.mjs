@@ -17,11 +17,11 @@ console.log(`Building for repo ${repository} (fork: ${isFork})`)
 
 // https://astro.build/config
 export default defineConfig({
-  site: isFork? `https://${owner}.github.io` : MAIN_SITE,
+  site: isFork ? `https://${owner}.github.io` : MAIN_SITE,
   base: isFork ? `/${name}` : "/",
 
   redirects: {
-    
+    "/article": "/"
   },
 
   devToolbar: {

@@ -1,0 +1,40 @@
+---
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import DefaultTemplate from '../../layouts/templates/DefaultTemplate.astro';
+
+/** Get a list of paths to generate */
+export async function getStaticPaths() {
+	const articles = await getCollection('articles');
+	return articles.map((article) => ({
+		params: { slug: article.id },
+		props: article,
+	}));
+}
+
+type Props = CollectionEntry<"articles">;
+
+// All the layouts supported
+const layouts = {
+  default: DefaultTemplate,
+};
+
+const isLayoutKey = (key: any): key is keyof typeof layouts => {
+  return key in layouts;
+};
+
+// Render article
+const article = Astro.props;
+const { Content } = await render(article);
+
+var template = article.data.template
+
+if (!isLayoutKey(template)) {
+  throw new Error(`Unknown template: ${template}`);
+}
+
+const Template = layouts[template];
+---
+
+<Template {...article.data}>
+	<Content />
+</Template>
