@@ -1,4 +1,6 @@
 ---
+import { joinWithBase } from "./Link";
+
 // This component should be inserted into the <head>
 
 // Throw if a property is not valid
@@ -42,7 +44,7 @@ throwIfNotString(title, "title");
 {/* Default tags */}
 <meta charset="utf-8" />
 <meta name="robots" content="index, follow" />
-<link rel="icon" href="/favicon.ico" />
+<link rel="icon" href={joinWithBase("/favicon.ico")} />
 
 <title>{title}</title>
 {description && <meta name="description" content={description} />}

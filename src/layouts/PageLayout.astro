@@ -2,7 +2,7 @@
 import { Image } from "astro:assets";
 import logo from "../assets/site/dclogo-black.png";
 import "../styles/global.css";
-import { Link } from "../components/Link";
+import { joinWithBase, Link } from "../components/Link";
 ---
 
 <html lang="en">
@@ -11,7 +11,7 @@ import { Link } from "../components/Link";
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#4c9ad0" />
 
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" href={joinWithBase("/favicon.ico")} />
 
     {/* Head SEO injection */}
     <slot name="head" />
