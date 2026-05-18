@@ -1,9 +1,20 @@
 ---
+import Seo from "../../components/Seo.astro";
 import PageLayout from "../PageLayout.astro";
 
-
+const { title, description, slug, featuredImage, byline, date } = Astro.props;
+console.log(Astro.props);
 ---
 
 <PageLayout>
+  <Seo
+    title={`${title} | The Daily Californian`}
+    description={description}
+    canonical={`https://data.dailycal.org/article/${slug}`}
+    image={featuredImage.src}
+    authors={byline}
+    publishDate={date}
+    slot="head"
+  />
   <slot />
 </PageLayout>

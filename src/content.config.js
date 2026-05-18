@@ -14,6 +14,7 @@ const articles = defineCollection({
 			featuredImage: image(),
       imageAttribution: z.string(),
       aboutStory: z.string().optional(),
+      description: z.string().optional(),
       template: z.string().default("default")
 		}),
 });

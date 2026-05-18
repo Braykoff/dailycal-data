@@ -35,6 +35,6 @@ if (!isLayoutKey(template)) {
 const Template = layouts[template];
 ---
 
-<Template {...article.data}>
+<Template {...article.data} slug={article.id}>
 	<Content />
 </Template>

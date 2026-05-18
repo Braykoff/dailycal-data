@@ -1,0 +1,100 @@
+---
+// This component should be inserted into the <head>
+
+// Throw if a property is not valid
+function throwIfNotString(property: string, name: string) {
+  if (typeof property !== "string" || property.trim().length === 0) {
+    throw new Error(`Seo ${name} property is required to be a string!`);
+  }
+}
+
+// Format ISO dates
+function toISODate(value: unknown, name: string): string | undefined {
+  if (value === undefined || value === null) return undefined;
+
+  const date = new Date(value as any);
+
+  if (isNaN(date.getTime())) {
+    throw new Error(`SEO ${name} must be a valid ISO date!`);
+  }
+
+  return date.toISOString();
+}
+
+const { title, description, canonical, pageType, image, authors, publishDate } =
+  Astro.props;
+
+// Authors may be a string or an array
+const safeAuthors =
+  typeof authors === "string"
+    ? [authors]
+    : Array.isArray(authors)
+      ? authors
+      : [];
+
+// Dates should be in ISO format
+const safeDate = toISODate(publishDate, "publishDate");
+
+// Some properties are required
+throwIfNotString(title, "title");
+---
+
+{/* Default tags */}
+<meta charset="utf-8" />
+<meta name="robots" content="index, follow" />
+<link rel="icon" href="/favicon.ico" />
+
+<title>{title}</title>
+{description && <meta name="description" content={description} />}
+{canonical && <link rel="canonical" href={canonical} />}
+
+{safeDate && <meta property="article:published_time" content={safeDate} />}
+{safeAuthors.map((a: string) => <meta property="article:author" content={a} />)}
+
+{/* Open Graph tags */}
+<meta property="og:type" content={pageType ?? "article"} />
+<meta property="og:title" content={title} />
+{description && <meta property="og:description" content={description} />}
+{canonical && <meta property="og:url" content={canonical} />}
+{image && <meta property="og:image" content={image} />}
+
+{/* X (formerly Twitter) tags */}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+{description && <meta name="twitter:description" content={description} />}
+{image && <meta name="twitter:image" content={image} />}
+
+{/* JSON-LD components */}
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": pageType ?? "Article",
+
+    headline: title,
+
+    ...(description && {
+      description,
+    }),
+
+    ...(canonical && {
+      url: canonical,
+    }),
+
+    ...(image && {
+      image,
+    }),
+
+    ...(safeDate && {
+      datePublished: safeDate,
+      dateModified: safeDate,
+    }),
+
+    ...(safeAuthors.length > 0 && {
+      author: safeAuthors.map((name: string) => ({
+        "@type": "Person",
+        name,
+      })),
+    }),
+  })}
+/>
