@@ -6,7 +6,7 @@ import react from "@astrojs/react";
 import mdx from "@astrojs/mdx";
 
 // Get git repo info (when run in GitHub Actions)
-const MAIN_REPO = "dailycal-projects/dailycalprojects";
+const MAIN_REPO = "dailycalprojects/dailycal-data";
 const MAIN_SITE = "https://data.dailycal.org";
 
 const repository = process.env.GITHUB_REPOSITORY ?? MAIN_REPO;
