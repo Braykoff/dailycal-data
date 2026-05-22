@@ -21,9 +21,17 @@ Article .mdx files expect the following frontmatter:
 | byline | String[] | An array of the names of authors on the byline | ✔ |
 | featuredImage | Image | The featured (hero) image for the article | ✔ |
 | imageAttribution | String | An attribution (contribution line) for the featured image | ✔ |
-| aboutStory | String | Text that appears at the bottom of the story, in the "About Story" container | |
 | description | String | A short description that can be used for SEO description properties | |
-| template | Astro File | The template .astro file to render your article into. If blank, the [default](./src/layouts/templates/default.astro) will be used. | |
+| template | Astro File | The template .astro file to render your article into. If blank, the [default](./src/layouts/templates/DefaultTemplate.astro) will be used. | |
+
+The following frontmatter is also allowed for the default template, but optional:
+
+| Key | Type | Description |
+| :-- | :-- | :-- |
+| subhead | String | A short subheading that can appear under the title |
+| hideHeroImage | Boolean | If true, the featured image will not appear in the article |
+| imageCaption | String | Text that can appear as a caption for the featured image  |
+| aboutStory | String | Text that can appear at the bottom of the story, in the "About Story" container |
 
 ## Commands
 

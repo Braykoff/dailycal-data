@@ -48,7 +48,7 @@ export function formatURL(url) {
  */
 export function Link(props) {
   const { href, ...rest } = props;
-  const formattedHref = formatURL(href);
+  const formattedHref = (typeof href === "string" && href.trim().length > 0) ? formatURL(href) : undefined;
 
   return (
     <a href={formattedHref} {...rest}>

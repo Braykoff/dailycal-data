@@ -1,11 +1,32 @@
 ---
+import { Image } from "astro:assets";
 import Seo from "../../components/Seo.astro";
 import PageLayout from "../PageLayout.astro";
+import { Link } from "../../components/Link";
+import "../../styles/default-template.css";
 
-const { title, description, slug, featuredImage, byline, date } = Astro.props;
+const {
+  title,
+  description,
+  slug,
+  featuredImage,
+  imageAttribution,
+  byline,
+  date,
+  subhead,
+  hideHeroImage,
+  imageCaption,
+} = Astro.props;
+
+const dateFormat = new Intl.DateTimeFormat("en-US", {
+  month: "long",
+  day: "numeric",
+  year: "numeric",
+});
 ---
 
 <PageLayout>
+  {/* SEO (in head slot) */}
   <Seo
     title={`${title} | The Daily Californian`}
     description={description}
@@ -15,5 +36,122 @@ const { title, description, slug, featuredImage, byline, date } = Astro.props;
     publishDate={date}
     slot="head"
   />
-  <slot />
+
+  <div class="article">
+    <div class="centeredItems">
+      {/* Header */}
+      <h1>{title}</h1>
+      {subhead && <h3>{subhead}</h3>}
+      <h5>{dateFormat.format(date)}</h5>
+
+      {/* Featured image */}
+      {
+        !hideHeroImage && (
+          <div class="imageContainer">
+            <Image src={featuredImage} alt="Featured image." class="image" />
+
+            {imageCaption && (
+              <div class="imageCaption">
+                <em>{imageCaption}</em>
+              </div>
+            )}
+
+            <h5>{imageAttribution}</h5>
+          </div>
+        )
+      }
+    </div>
+
+    {/* Byline */}
+    <div class="byline">
+      By{" "}
+      {
+        byline.map((author: string, i: number) => {
+          const isLast = i === byline.length - 1;
+          const isSecondToLast = i === byline.length - 2;
+
+          // TODO Links, people pages
+          return (
+            <>
+              <Link>{author}</Link>
+              {byline.length > 2 && !isLast && !isSecondToLast && ", "}
+              {isSecondToLast ? " & " : ""}
+            </>
+          );
+        })
+      }
+    </div>
+
+    {/* Article */}
+    <article class="content">
+      <slot />
+    </article>
+  </div>
 </PageLayout>
+
+<style>
+  .article {
+    display: flex;
+    flex-direction: column;
+    padding: 30px 0;
+    margin: 0 auto;
+    max-width: 640px;
+    font-family: Georgia, sans-serif;
+  }
+  .centeredItems {
+    width: 100%;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+  }
+  .imageContainer .image {
+    width: 100%;
+    height: auto;
+  }
+  .imageContainer .caption,
+  .imageContainer h5 {
+    margin-top: 10px;
+  }
+  .byline {
+    font-size: 15px;
+    font-family: sans-serif;
+    margin-bottom: 25px;
+    width: 100%;
+  }
+  .byline a {
+    color: var(--palette-dark-blue);
+  }
+  /* Article text styling */
+
+  em {
+    font-family: var(--font-list);
+    color: var(--palette-dark-gray);
+  }
+  .content p {
+    color: red;
+  }
+</style>
+
+<style>
+  h1 {
+    font-weight: 600;
+    font-size: 35px;
+    line-height: normal;
+  }
+  h3 {
+    font-weight: 300;
+    font-size: 24px;
+    line-height: normal;
+    margin-top: 0;
+    color: var(--palette-dark-gray);
+    font-family: var(--font-list);
+  }
+  h5 {
+    margin: 0 0 1.45rem 0;
+    color: var(--palette-dark-gray);
+    font-family: var(--font-list);
+    font-weight: 500;
+    font-size: 0.87055rem;
+    line-height: 1.1;
+  }
+</style>
