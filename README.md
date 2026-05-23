@@ -32,6 +32,7 @@ The following frontmatter is also allowed for the default template, but optional
 | hideHeroImage | Boolean | If true, the featured image will not appear in the article |
 | imageCaption | String | Text that can appear as a caption for the featured image  |
 | aboutStory | String | Text that can appear at the bottom of the story, in the "About Story" container |
+| jointDept | String | If present, the article footer will contain information designating the article as a joint-department article |
 
 ## Commands
 

@@ -46,13 +46,16 @@ export function formatURL(url) {
  * @param {*} props 
  * @returns 
  */
-export function Link(props) {
-  const { href, ...rest } = props;
+export function Link({ href, style, children, ...rest }) {
   const formattedHref = (typeof href === "string" && href.trim().length > 0) ? formatURL(href) : undefined;
 
   return (
-    <a href={formattedHref} {...rest}>
-      {props.children}
+    <a 
+      href={formattedHref}
+      style={style ?? { color: "var(--palette-dark-blue)" }}
+      {...rest}
+    >
+      {children}
     </a>
   )
 }

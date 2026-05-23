@@ -21,6 +21,7 @@ const articles = defineCollection({
       hideHeroImage: z.boolean().default(false),
       imageCaption: z.string().optional(),
       aboutStory: z.string().optional(),
+      jointDept: z.string().optional()
     }),
 });
 
