@@ -26,8 +26,8 @@ const dateFormat = new Intl.DateTimeFormat("en-US", {
       <div class="description">
         <h1>Data</h1>
         <p>
-          Investigative stories, data analysis and graphics by The Daily
-          Californian&apos;s Data Team
+          Investigative stories, data analysis and graphics by The Daily Californian&apos;s Data
+          Team
         </p>
       </div>
     </div>
@@ -41,11 +41,7 @@ const dateFormat = new Intl.DateTimeFormat("en-US", {
               {/* Date */}
               <div class="date">{dateFormat.format(article.data.date)}</div>
               {/* Image */}
-              <Image
-                src={circleLogo}
-                alt="Featured image here"
-                class="featuredImage"
-              />
+              <Image src={circleLogo} alt="Featured image here" class="featuredImage" />
               {/* Title */}
               <div class="title">{article.data.title}</div>
             </div>

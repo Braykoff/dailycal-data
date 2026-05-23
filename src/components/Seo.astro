@@ -23,16 +23,10 @@ function toISODate(value: unknown, name: string): string | undefined {
   return date.toISOString();
 }
 
-const { title, description, canonical, pageType, image, authors, publishDate } =
-  Astro.props;
+const { title, description, canonical, pageType, image, authors, publishDate } = Astro.props;
 
 // Authors may be a string or an array
-const safeAuthors =
-  typeof authors === "string"
-    ? [authors]
-    : Array.isArray(authors)
-      ? authors
-      : [];
+const safeAuthors = typeof authors === "string" ? [authors] : Array.isArray(authors) ? authors : [];
 
 // Dates should be in ISO format
 const safeDate = toISODate(publishDate, "publishDate");

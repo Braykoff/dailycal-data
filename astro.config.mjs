@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig } from "astro/config";
 
 import react from "@astrojs/react";
 
@@ -13,7 +13,7 @@ const repository = process.env.GITHUB_REPOSITORY ?? MAIN_REPO;
 const [owner, name] = repository.split("/");
 const isFork = repository !== MAIN_REPO;
 
-console.log(`Building for repo ${repository} (fork: ${isFork})`)
+console.log(`Building for repo ${repository} (fork: ${isFork})`);
 
 // https://astro.build/config
 export default defineConfig({
@@ -21,12 +21,12 @@ export default defineConfig({
   base: isFork ? `/${name}` : "/",
 
   redirects: {
-    "/article": "/"
+    "/article": "/",
   },
 
   devToolbar: {
-    enabled: false
+    enabled: false,
   },
 
-  integrations: [react(), mdx()]
+  integrations: [react(), mdx()],
 });

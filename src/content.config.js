@@ -1,10 +1,10 @@
-import { defineCollection } from 'astro:content';
-import { glob } from 'astro/loaders';
-import { z } from 'astro/zod';
+import { defineCollection } from "astro:content";
+import { glob } from "astro/loaders";
+import { z } from "astro/zod";
 
 /** Articles collection */
 const articles = defineCollection({
-  loader: glob({ base: './src/content/articles', pattern: '**/*.mdx' }),
+  loader: glob({ base: "./src/content/articles", pattern: "**/*.mdx" }),
   // Type-check frontmatter using a schema
   schema: ({ image }) =>
     z.object({
@@ -21,7 +21,7 @@ const articles = defineCollection({
       hideHeroImage: z.boolean().default(false),
       imageCaption: z.string().optional(),
       aboutStory: z.string().optional(),
-      jointDept: z.string().optional()
+      jointDept: z.string().optional(),
     }),
 });
 
