@@ -37,6 +37,7 @@ const tsLogicRuleOverrides = {
 };
 
 const reactJsxRules = {
+  "react/jsx-uses-vars": "error",
   "react/self-closing-comp": "error",
   "react/jsx-no-useless-fragment": "error",
   "react/display-name": "off",
@@ -105,6 +106,9 @@ export default [
   {
     files: [srcJsx],
     languageOptions: {
+      ecmaVersion: "latest",
+      sourceType: "module",
+      globals: globals.browser,
       parserOptions: {
         ecmaFeatures: {
           jsx: true,
@@ -136,6 +140,7 @@ export default [
   {
     files: [srcTsx],
     languageOptions: {
+      globals: globals.browser,
       parserOptions: {
         ecmaFeatures: {
           jsx: true,
@@ -159,6 +164,9 @@ export default [
 
   {
     files: astroClientScripts,
+    languageOptions: {
+      globals: globals.browser,
+    },
     rules: logicRules,
   },
 
@@ -171,6 +179,7 @@ export default [
     }),
     rules: {
       ...logicRules,
+      ...reactJsxRules,
       "mdx/remark": "off",
       "no-unused-expressions": "off",
       "react/react-in-jsx-scope": "off",
