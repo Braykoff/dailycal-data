@@ -38,14 +38,14 @@ The following frontmatter is also allowed for the default template, but optional
 
 All commands are run from the root of the project, from a terminal:
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+| Command | Action |
+| :-- | :-- |
+| `npm install` | Installs dependencies |
+| `npm run dev` | Starts local dev server at `localhost:4321` |
+| `npm run build` | Build your production site to `./dist/` |
+| `npm run preview` | Preview your build locally, before deploying |
+| `npm run lint` | Runs ESLint and Prettier to check formatting and style |
+| `npm run lint:fix` | Fixes ESLint and Prettier styling errors |
 
 ## Contact
 The Data Department can be contacted at [projects@dailycal.org](mailto:projects@dailycal.org)
