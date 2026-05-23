@@ -66,23 +66,15 @@ const isJointDept = typeof jointDept === "string" && jointDept.trim().length > 0
       }
     </div>
 
-    {/* Byline */}
+    {
+      /* Byline — flatMap avoids per-author fragments (Astro inserts whitespace between mapped siblings) */
+    }
     <div class="byline">
-      By{" "}
-      {
-        byline.map((author: string, i: number) => {
-          const isLast = i === byline.length - 1;
-          const isSecondToLast = i === byline.length - 2;
-
-          // TODO Links, people pages
-          return (
-            <>
-              <Link>{author}</Link>
-              {byline.length > 2 && !isLast && !isSecondToLast && ", "}
-              {isSecondToLast ? " & " : ""}
-            </>
-          );
-        })
+      <span>By </span>{
+        byline.flatMap((author: string, i: number) => [
+          ...(i > 0 ? [i === byline.length - 1 ? " & " : ", "] : []),
+          <Link>{author}</Link>,
+        ])
       }
     </div>
 

@@ -41,7 +41,11 @@ const dateFormat = new Intl.DateTimeFormat("en-US", {
               {/* Date */}
               <div class="date">{dateFormat.format(article.data.date)}</div>
               {/* Image */}
-              <Image src={article.data.featuredImage} alt="Featured image here" class="featuredImage" />
+              <Image
+                src={article.data.featuredImage}
+                alt="Featured image here"
+                class="featuredImage"
+              />
               {/* Title */}
               <div class="title">{article.data.title}</div>
             </div>
