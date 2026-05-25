@@ -15,7 +15,6 @@ const isFork = repository !== MAIN_REPO;
 
 console.log(`Building for repo ${repository} (fork: ${isFork})`);
 
-// https://astro.build/config
 export default defineConfig({
   site: isFork ? `https://${owner}.github.io` : MAIN_SITE,
   base: isFork ? `/${name}` : "/",

@@ -66,9 +66,7 @@ const isJointDept = typeof jointDept === "string" && jointDept.trim().length > 0
       }
     </div>
 
-    {
-      /* Byline — flatMap avoids per-author fragments (Astro inserts whitespace between mapped siblings) */
-    }
+    {/* Byline (flatMap avoids whitespace between authors) */}
     <div class="byline">
       <span>By </span>{
         byline.flatMap((author: string, i: number) => [
