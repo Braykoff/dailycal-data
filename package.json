@@ -9,8 +9,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "lint": "eslint --no-error-on-unmatched-pattern \"src/**/*.{js,ts,jsx,tsx,astro,mdx,json}\" \"astro.config.mjs\" \"eslint.config.js\" \"prettier.config.js\" \"*.config.js\" \"*.config.mjs\" \"*.config.ts\" && prettier --check --no-error-on-unmatched-pattern \"src/**/*.{js,ts,jsx,tsx,astro,mdx,json,css}\" \"astro.config.mjs\" \"eslint.config.js\" \"prettier.config.js\" \"*.config.js\" \"*.config.mjs\" \"*.config.ts\"",
-    "lint:fix": "eslint --no-error-on-unmatched-pattern \"src/**/*.{js,ts,jsx,tsx,astro,mdx,json}\" \"astro.config.mjs\" \"eslint.config.js\" \"prettier.config.js\" \"*.config.js\" \"*.config.mjs\" \"*.config.ts\" --fix && prettier --write --no-error-on-unmatched-pattern \"src/**/*.{js,ts,jsx,tsx,astro,mdx,json,css}\" \"astro.config.mjs\" \"eslint.config.js\" \"prettier.config.js\" \"*.config.js\" \"*.config.mjs\" \"*.config.ts\""
+    "lint": "eslint --no-error-on-unmatched-pattern \"src/**/*.{js,ts,jsx,tsx,astro,mdx,json}\" \"scripts/**/*.js\" \"astro.config.mjs\" \"eslint.config.js\" \"prettier.config.js\" \"*.config.js\" \"*.config.mjs\" \"*.config.ts\" && prettier --check --no-error-on-unmatched-pattern \"src/**/*.{js,ts,jsx,tsx,astro,mdx,json,css}\" \"scripts/**/*.js\" \"astro.config.mjs\" \"eslint.config.js\" \"prettier.config.js\" \"*.config.js\" \"*.config.mjs\" \"*.config.ts\"",
+    "lint:fix": "eslint --no-error-on-unmatched-pattern \"src/**/*.{js,ts,jsx,tsx,astro,mdx,json}\" \"scripts/**/*.js\" \"astro.config.mjs\" \"eslint.config.js\" \"prettier.config.js\" \"*.config.js\" \"*.config.mjs\" \"*.config.ts\" --fix && prettier --write --no-error-on-unmatched-pattern \"src/**/*.{js,ts,jsx,tsx,astro,mdx,json,css}\" \"scripts/**/*.js\" \"astro.config.mjs\" \"eslint.config.js\" \"prettier.config.js\" \"*.config.js\" \"*.config.mjs\" \"*.config.ts\"",
+    "optimize": "node scripts/optimize.js"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.6",
@@ -35,6 +36,7 @@
     "globals": "^17.6.0",
     "prettier": "^3.8.3",
     "prettier-plugin-astro": "^0.14.1",
+    "sharp": "^0.34.5",
     "typescript-eslint": "^8.59.4"
   }
 }
