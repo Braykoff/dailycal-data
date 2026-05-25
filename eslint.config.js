@@ -60,7 +60,8 @@ const rootConfigs = [
 ];
 
 const jsLikeFiles = [srcJs, ...rootConfigs];
-const tsLikeFiles = [srcTs, srcTsx];
+const scriptsTs = "scripts/**/*.ts";
+const tsLikeFiles = [srcTs, srcTsx, scriptsTs];
 const astroClientScripts = ["**/*.astro/*.js", "**/*.astro/*.ts"];
 
 /** @type {import("eslint").Linter.Config[]} */
@@ -123,6 +124,9 @@ export default [
 
   {
     files: tsLikeFiles,
+    plugins: {
+      "@typescript-eslint": tseslint.plugin,
+    },
     languageOptions: {
       parser: tseslint.parser,
       parserOptions: {
@@ -134,6 +138,13 @@ export default [
     rules: {
       ...logicRules,
       ...tsLogicRuleOverrides,
+    },
+  },
+
+  {
+    files: [scriptsTs],
+    languageOptions: {
+      globals: globals.node,
     },
   },
 

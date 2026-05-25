@@ -9,9 +9,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "lint": "eslint --no-error-on-unmatched-pattern \"src/**/*.{js,ts,jsx,tsx,astro,mdx,json}\" \"scripts/**/*.js\" \"astro.config.mjs\" \"eslint.config.js\" \"prettier.config.js\" \"*.config.js\" \"*.config.mjs\" \"*.config.ts\" && prettier --check --no-error-on-unmatched-pattern \"src/**/*.{js,ts,jsx,tsx,astro,mdx,json,css}\" \"scripts/**/*.js\" \"astro.config.mjs\" \"eslint.config.js\" \"prettier.config.js\" \"*.config.js\" \"*.config.mjs\" \"*.config.ts\"",
-    "lint:fix": "eslint --no-error-on-unmatched-pattern \"src/**/*.{js,ts,jsx,tsx,astro,mdx,json}\" \"scripts/**/*.js\" \"astro.config.mjs\" \"eslint.config.js\" \"prettier.config.js\" \"*.config.js\" \"*.config.mjs\" \"*.config.ts\" --fix && prettier --write --no-error-on-unmatched-pattern \"src/**/*.{js,ts,jsx,tsx,astro,mdx,json,css}\" \"scripts/**/*.js\" \"astro.config.mjs\" \"eslint.config.js\" \"prettier.config.js\" \"*.config.js\" \"*.config.mjs\" \"*.config.ts\"",
-    "optimize": "node scripts/optimize.js"
+    "lint": "eslint --no-error-on-unmatched-pattern \"src/**/*.{js,ts,jsx,tsx,astro,mdx,json}\" \"scripts/**/*.ts\" \"astro.config.mjs\" \"eslint.config.js\" \"prettier.config.js\" \"*.config.js\" \"*.config.mjs\" \"*.config.ts\" && prettier --check --no-error-on-unmatched-pattern \"src/**/*.{js,ts,jsx,tsx,astro,mdx,json,css}\" \"scripts/**/*.ts\" \"astro.config.mjs\" \"eslint.config.js\" \"prettier.config.js\" \"*.config.js\" \"*.config.mjs\" \"*.config.ts\"",
+    "lint:fix": "eslint --no-error-on-unmatched-pattern \"src/**/*.{js,ts,jsx,tsx,astro,mdx,json}\" \"scripts/**/*.ts\" \"astro.config.mjs\" \"eslint.config.js\" \"prettier.config.js\" \"*.config.js\" \"*.config.mjs\" \"*.config.ts\" --fix && prettier --write --no-error-on-unmatched-pattern \"src/**/*.{js,ts,jsx,tsx,astro,mdx,json,css}\" \"scripts/**/*.ts\" \"astro.config.mjs\" \"eslint.config.js\" \"prettier.config.js\" \"*.config.js\" \"*.config.mjs\" \"*.config.ts\"",
+    "optimize": "node scripts/optimize.ts"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.6",
