@@ -20,6 +20,7 @@ const articles = defineCollection({
       subhead: z.string().optional(),
       hideHeroImage: z.boolean().default(false),
       imageCaption: z.string().optional(),
+      bylineLinks: z.array(z.string()).default([]),
       aboutStory: z.string().optional(),
       jointDept: z.string().optional(),
     }),

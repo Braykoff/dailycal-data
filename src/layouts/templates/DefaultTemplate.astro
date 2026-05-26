@@ -15,18 +15,28 @@ const {
   description,
   subhead,
   hideHeroImage,
+  bylineLinks,
   imageCaption,
   aboutStory,
   jointDept,
 } = Astro.props;
 
+// Format date
 const dateFormat = new Intl.DateTimeFormat("en-US", {
   month: "long",
   day: "numeric",
   year: "numeric",
 });
 
+// Check if is joint-department article
 const isJointDept = typeof jointDept === "string" && jointDept.trim().length > 0;
+
+// Validate byline links
+if (bylineLinks.length !== 0 && bylineLinks.length !== byline.length) {
+  throw new Error(
+    `${slug} has ${byline.length} byline names and ${bylineLinks.length} byline links (these must be the same size)`,
+  );
+}
 ---
 
 <PageLayout>
@@ -71,7 +81,17 @@ const isJointDept = typeof jointDept === "string" && jointDept.trim().length > 0
       <span>By </span>{
         byline.flatMap((author: string, i: number) => [
           ...(i > 0 ? [i === byline.length - 1 ? " & " : ", "] : []),
-          <Link>{author}</Link>,
+          <Link
+            href={
+              bylineLinks.length > 0 &&
+              typeof bylineLinks[i] === "string" &&
+              bylineLinks[i].trim().length > 0
+                ? bylineLinks[i]
+                : `https://www.dailycal.org/users/profile/${author}/` // TODO staff pages
+            }
+          >
+            {author}
+          </Link>,
         ])
       }
     </div>
