@@ -23,23 +23,14 @@ function toISODate(value: unknown, name: string): string | undefined {
   return date.toISOString();
 }
 
-// Make a url path absolute (ie, add https://example.com/ to the front)
-function toAbsoluteURL(url: string | undefined): string | undefined {
-  if (!url) return undefined;
-  if (/^https?:\/\//i.test(url)) return url;
-  const site = Astro.site?.origin ?? "";
-  // We don't need joinWithBase(...) here because Astro handles bases with image urls for us.
-  return `${site}${url}`;
-}
-
 // Resolve the og:image URL, converting local images to WebP for broad platform support.
 async function resolveOgImage(
   image: ImageMetadata | string | undefined,
 ): Promise<string | undefined> {
   if (!image) return undefined;
-  if (typeof image === "string") return toAbsoluteURL(image);
+  if (typeof image === "string") return image;
   const optimized = await getImage({ src: image, format: "webp" });
-  return toAbsoluteURL(optimized.src);
+  return optimized.src;
 }
 
 // Properties
