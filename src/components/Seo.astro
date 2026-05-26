@@ -1,14 +1,14 @@
 ---
 import { joinWithBase } from "./Link";
 
-// Helpers
-
+// Throw if a property is not a valid string
 function throwIfNotString(property: string, name: string) {
   if (typeof property !== "string" || property.trim().length === 0) {
     throw new Error(`Seo ${name} property is required to be a string!`);
   }
 }
 
+// Convert a date into an ISO date string
 function toISODate(value: unknown, name: string): string | undefined {
   if (value === undefined || value === null) return undefined;
 
@@ -21,15 +21,16 @@ function toISODate(value: unknown, name: string): string | undefined {
   return date.toISOString();
 }
 
+// Make a url path absolute (ie, add https://example.com/ to the front)
 function toAbsoluteURL(url: string | undefined): string | undefined {
   if (!url) return undefined;
   if (/^https?:\/\//i.test(url)) return url;
   const site = Astro.site?.origin ?? "";
-  return `${site}${joinWithBase(url)}`;
+  // We don't need joinWithBase(...) here because Astro handles bases with image urls for us.
+  return `${site}${url}`;
 }
 
-// Props
-
+// Properties
 type PageType = "article" | "website";
 
 const { title, description, canonical, image, pageType, authors, publishDate } = Astro.props as {
@@ -42,8 +43,7 @@ const { title, description, canonical, image, pageType, authors, publishDate } =
   publishDate?: unknown;
 };
 
-// Validation
-
+// Throw if the page type (article or website) is not specified
 if (pageType !== "article" && pageType !== "website") {
   throw new Error(`Seo pageType must be "article" or "website", got: ${JSON.stringify(pageType)}`);
 }
@@ -52,11 +52,9 @@ const isArticle = pageType === "article";
 
 throwIfNotString(title, "title");
 
-// Resolve image to an absolute URL for OG/Twitter/JSON-LD
-
 const absoluteImage = toAbsoluteURL(image);
 
-// Normalize article-specific fields (authors, date); ignored for non-articles
+// Article-specific processing
 const safeAuthors = isArticle
   ? typeof authors === "string"
     ? [authors]
@@ -71,8 +69,7 @@ if (isArticle && safeAuthors.length === 0) {
   throw new Error("Seo authors property is required for articles!");
 }
 
-// Derived schema values
-
+// JSON-LD type and primary label differ between articles and pages
 const schemaType = isArticle ? "Article" : "WebPage";
 const ogType = isArticle ? "article" : "website";
 ---
