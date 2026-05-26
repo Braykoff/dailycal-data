@@ -1,38 +1,80 @@
 ---
 import { joinWithBase } from "./Link";
 
-// This component should be inserted into the <head>
+// Helpers
 
-// Throw if a property is not valid
 function throwIfNotString(property: string, name: string) {
   if (typeof property !== "string" || property.trim().length === 0) {
     throw new Error(`Seo ${name} property is required to be a string!`);
   }
 }
 
-// Format ISO dates
 function toISODate(value: unknown, name: string): string | undefined {
   if (value === undefined || value === null) return undefined;
 
   const date = new Date(value as any);
 
   if (isNaN(date.getTime())) {
-    throw new Error(`SEO ${name} must be a valid ISO date!`);
+    throw new Error(`Seo ${name} must be a valid ISO date!`);
   }
 
   return date.toISOString();
 }
 
-const { title, description, canonical, pageType, image, authors, publishDate } = Astro.props;
+function toAbsoluteURL(url: string | undefined): string | undefined {
+  if (!url) return undefined;
+  if (/^https?:\/\//i.test(url)) return url;
+  const site = Astro.site?.origin ?? "";
+  return `${site}${joinWithBase(url)}`;
+}
 
-// Authors may be a string or an array
-const safeAuthors = typeof authors === "string" ? [authors] : Array.isArray(authors) ? authors : [];
+// Props
 
-// Dates should be in ISO format
-const safeDate = toISODate(publishDate, "publishDate");
+type PageType = "article" | "website";
 
-// Some properties are required
+const { title, description, canonical, image, pageType, authors, publishDate } = Astro.props as {
+  title: string;
+  description?: string;
+  canonical?: string;
+  image?: string;
+  pageType: PageType;
+  authors?: string | string[];
+  publishDate?: unknown;
+};
+
+// Validation
+
+if (pageType !== "article" && pageType !== "website") {
+  throw new Error(`Seo pageType must be "article" or "website", got: ${JSON.stringify(pageType)}`);
+}
+
+const isArticle = pageType === "article";
+
 throwIfNotString(title, "title");
+
+// Resolve image to an absolute URL for OG/Twitter/JSON-LD
+
+const absoluteImage = toAbsoluteURL(image);
+
+// Normalize article-specific fields (authors, date); ignored for non-articles
+const safeAuthors = isArticle
+  ? typeof authors === "string"
+    ? [authors]
+    : Array.isArray(authors)
+      ? authors
+      : []
+  : [];
+
+const safeDate = isArticle ? toISODate(publishDate, "publishDate") : undefined;
+
+if (isArticle && safeAuthors.length === 0) {
+  throw new Error("Seo authors property is required for articles!");
+}
+
+// Derived schema values
+
+const schemaType = isArticle ? "Article" : "WebPage";
+const ogType = isArticle ? "article" : "website";
 ---
 
 {/* Default tags */}
@@ -48,38 +90,32 @@ throwIfNotString(title, "title");
 {safeAuthors.map((a: string) => <meta property="article:author" content={a} />)}
 
 {/* Open Graph tags */}
-<meta property="og:type" content={pageType ?? "article"} />
+<meta property="og:type" content={ogType} />
 <meta property="og:title" content={title} />
 {description && <meta property="og:description" content={description} />}
 {canonical && <meta property="og:url" content={canonical} />}
-{image && <meta property="og:image" content={image} />}
+{absoluteImage && <meta property="og:image" content={absoluteImage} />}
 
 {/* X (formerly Twitter) tags */}
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={title} />
 {description && <meta name="twitter:description" content={description} />}
-{image && <meta name="twitter:image" content={image} />}
+{absoluteImage && <meta name="twitter:image" content={absoluteImage} />}
 
-{/* JSON-LD components */}
+{/* JSON-LD structured data */}
 <script
   type="application/ld+json"
   set:html={JSON.stringify({
     "@context": "https://schema.org",
-    "@type": pageType ?? "Article",
+    "@type": schemaType,
 
-    headline: title,
+    ...(isArticle ? { headline: title } : { name: title }),
 
-    ...(description && {
-      description,
-    }),
+    ...(description && { description }),
 
-    ...(canonical && {
-      url: canonical,
-    }),
+    ...(canonical && { url: canonical }),
 
-    ...(image && {
-      image,
-    }),
+    ...(absoluteImage && { image: absoluteImage }),
 
     ...(safeDate && {
       datePublished: safeDate,

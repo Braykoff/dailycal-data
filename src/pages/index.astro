@@ -1,9 +1,14 @@
 ---
 import PageLayout from "../layouts/PageLayout.astro";
 import circleLogo from "../assets/site/dclogo-circle.png";
+import longLogo from "../assets/site/dclogo-black.png";
 import { Image } from "astro:assets";
 import { Link } from "../components/Link";
 import { getCollection } from "astro:content";
+import Seo from "../components/Seo.astro";
+
+const desc =
+  "Investigative stories, data analysis and graphics by The Daily Californian's Data Team";
 
 // Get articles, sorted by publish date
 const articles = (await getCollection("articles")).sort(
@@ -19,16 +24,23 @@ const dateFormat = new Intl.DateTimeFormat("en-US", {
 ---
 
 <PageLayout>
+  {/* SEO */}
+  <Seo
+    title={`The Daily Californian: Data`}
+    description={desc}
+    canonical={`https://data.dailycal.org/`}
+    image={longLogo.src}
+    pageType="website"
+    slot="head"
+  />
+
   <div class="content">
     {/* Intro */}
     <div class="intro">
       <Image src={circleLogo} alt="The Daily Californian" class="logo" />
       <div class="description">
         <h1>Data</h1>
-        <p>
-          Investigative stories, data analysis and graphics by The Daily Californian&apos;s Data
-          Team
-        </p>
+        <p>{desc}</p>
       </div>
     </div>
 
