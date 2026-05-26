@@ -1,5 +1,7 @@
 ---
+import { getImage } from "astro:assets";
 import { joinWithBase } from "./Link";
+import type { ImageMetadata } from "astro";
 
 // Throw if a property is not a valid string
 function throwIfNotString(property: string, name: string) {
@@ -30,6 +32,16 @@ function toAbsoluteURL(url: string | undefined): string | undefined {
   return `${site}${url}`;
 }
 
+// Resolve the og:image URL, converting local images to WebP for broad platform support.
+async function resolveOgImage(
+  image: ImageMetadata | string | undefined,
+): Promise<string | undefined> {
+  if (!image) return undefined;
+  if (typeof image === "string") return toAbsoluteURL(image);
+  const optimized = await getImage({ src: image, format: "webp" });
+  return toAbsoluteURL(optimized.src);
+}
+
 // Properties
 type PageType = "article" | "website";
 
@@ -37,7 +49,7 @@ const { title, description, canonical, image, pageType, authors, publishDate } =
   title: string;
   description?: string;
   canonical?: string;
-  image?: string;
+  image?: ImageMetadata | string;
   pageType: PageType;
   authors?: string | string[];
   publishDate?: unknown;
@@ -52,7 +64,7 @@ const isArticle = pageType === "article";
 
 throwIfNotString(title, "title");
 
-const absoluteImage = toAbsoluteURL(image);
+const absoluteImage = await resolveOgImage(image);
 
 // Article-specific processing
 const safeAuthors = isArticle
