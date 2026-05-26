@@ -1,7 +1,6 @@
 ---
 import PageLayout from "../layouts/PageLayout.astro";
 import circleLogo from "../assets/site/dclogo-circle.png";
-import longLogo from "../assets/site/dclogo-black.png";
 import { Image } from "astro:assets";
 import { Link } from "../components/Link";
 import { getCollection } from "astro:content";
@@ -29,7 +28,7 @@ const dateFormat = new Intl.DateTimeFormat("en-US", {
     title={`The Daily Californian: Data`}
     description={desc}
     canonical={`https://data.dailycal.org/`}
-    image={longLogo.src}
+    image={circleLogo.src}
     pageType="website"
     slot="head"
   />
