@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /dailycal-data/editors/
+Allow: /
+
+Sitemap: https://braykoff.github.io/dailycal-data/sitemap-index.xml
