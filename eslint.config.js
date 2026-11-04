@@ -34,6 +34,8 @@ const tsLogicRuleOverrides = {
     { varsIgnorePattern: "^_", argsIgnorePattern: "^_" },
   ],
   "@typescript-eslint/no-explicit-any": "off",
+  // TypeScript already reports undefined names, and knows about globals like URL and Response
+  "no-undef": "off",
 };
 
 const reactJsxRules = {
@@ -168,10 +170,19 @@ export default [
 
   {
     files: astroClientScripts,
+    plugins: {
+      "@typescript-eslint": tseslint.plugin,
+    },
     languageOptions: {
+      parser: tseslint.parser,
       globals: globals.browser,
     },
-    rules: logicRules,
+    rules: {
+      ...logicRules,
+      ...tsLogicRuleOverrides,
+      // Prettier already formats these scripts as part of the whole .astro file
+      "prettier/prettier": "off",
+    },
   },
 
   {

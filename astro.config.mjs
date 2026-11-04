@@ -5,6 +5,8 @@ import react from "@astrojs/react";
 
 import mdx from "@astrojs/mdx";
 
+import sitemap from "@astrojs/sitemap";
+
 // Get git repo info (when run in GitHub Actions)
 const MAIN_REPO = "dailycalprojects/dailycal-data";
 const MAIN_SITE = "https://data.dailycal.org";
@@ -27,5 +29,12 @@ export default defineConfig({
     enabled: false,
   },
 
-  integrations: [react(), mdx()],
+  integrations: [
+    react(),
+    mdx(),
+    sitemap({
+      // /editors/ holds internal tools that robots.txt disallows; /article only redirects
+      filter: (page) => !page.includes("/editors/") && !/\/article\/?$/.test(page),
+    }),
+  ],
 });

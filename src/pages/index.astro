@@ -1,65 +1,30 @@
 ---
-import PageLayout from "../layouts/PageLayout.astro";
-import circleLogo from "../assets/site/dclogo-circle.png";
 import { Image } from "astro:assets";
-import { Link } from "../components/Link";
-import { getCollection } from "astro:content";
-import Seo from "../components/Seo.astro";
+import circleLogo from "../assets/site/dclogo-circle.png";
+import ArticleCard from "../components/ArticleCard.astro";
+import { site } from "../config/site";
+import PageLayout from "../layouts/PageLayout.astro";
+import { getArticles } from "../lib/articles";
 
-const desc =
-  "Investigative stories, data analysis and graphics by The Daily Californian's Data Team";
-
-// Get articles, sorted by publish date
-const articles = (await getCollection("articles")).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
-);
-
-// Date formatter
-const dateFormat = new Intl.DateTimeFormat("en-US", {
-  month: "long",
-  day: "numeric",
-  year: "numeric",
-});
+// Every article, newest first
+const articles = await getArticles();
 ---
 
-<PageLayout>
-  {/* SEO */}
-  <Seo
-    title={`The Daily Californian: Data`}
-    description={desc}
-    canonical={`https://data.dailycal.org/`}
-    image={circleLogo}
-    pageType="website"
-    slot="head"
-  />
-
+<PageLayout title={site.name} imageAlt="The Daily Californian logo">
   <div class="content">
     {/* Intro */}
     <div class="intro">
-      <Image src={circleLogo} alt="The Daily Californian" class="logo" />
+      <Image src={circleLogo} alt="" class="logo" width={100} loading="eager" />
       <div class="description">
         <h1>Data</h1>
-        <p>{desc}</p>
+        <p>{site.description}</p>
       </div>
     </div>
 
     {/* Articles */}
     <div class="index">
-      {articles.map((article) => (
-        <Link href={`/article/${article.id}`} className="articleCardLink">
-          <div class="articleCard">
-            {/* Date */}
-            <div class="date">{dateFormat.format(article.data.date)}</div>
-            {/* Image */}
-            <Image
-              src={article.data.featuredImage}
-              alt="Featured image here"
-              class="featuredImage"
-            />
-            {/* Title */}
-            <div class="title">{article.data.title}</div>
-          </div>
-        </Link>
+      {articles.map((article, i) => (
+        <ArticleCard article={article} eager={i < 3} />
       ))}
     </div>
   </div>
@@ -82,12 +47,14 @@ const dateFormat = new Intl.DateTimeFormat("en-US", {
     flex-direction: row;
     align-items: center;
     gap: 8px;
+    padding: 0 20px;
   }
 
   .intro .logo {
     width: 100px;
     height: auto;
     margin: 0;
+    flex-shrink: 0;
   }
 
   .intro .description {
@@ -116,60 +83,13 @@ const dateFormat = new Intl.DateTimeFormat("en-US", {
     flex-wrap: wrap;
   }
 
-  .articleCardLink {
-    text-decoration: none;
-  }
-
-  .articleCard {
-    display: flex;
-    flex-direction: column;
-    width: 360px;
-    height: 350px;
-    margin: 20px;
-    font-size: 15px;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    font-family: Georgia, sans-serif;
-  }
-
-  .articleCard:hover .title {
-    text-decoration: underline;
-  }
-
-  .articleCard .date {
-    color: var(--palette-gray);
-    border-top: 1px solid var(--palette-dark-gray);
-    font-weight: 400;
-    line-height: normal;
-    font-size: 12px;
-    padding-bottom: 10px;
-    padding-top: 10px;
-  }
-
-  .articleCard .featuredImage {
-    width: 360px;
-    height: 200px;
-  }
-
-  .articleCard .title {
-    font-weight: 400;
-    line-height: normal;
-    color: var(--palette-black);
-    font-size: 24px;
-    text-decoration: none;
-    margin-top: auto;
-  }
-
-  /* Mobile/Desktop specific styling */
   @media (min-width: 1200px) {
     .content {
       width: 1200px;
       align-items: normal;
     }
-  }
-
-  @media (max-width: 600px) {
-    .articleCard {
-      width: 350px;
+    .index {
+      justify-content: flex-start;
     }
   }
 </style>

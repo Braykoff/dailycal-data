@@ -1,23 +1,28 @@
 import sharp from "sharp";
 import { stat } from "node:fs/promises";
 import { basename, extname, dirname, join } from "node:path";
+import { imageOptimization } from "../src/config/images.ts";
 
 /**
  * Optimizes an images size so that the size of this GitHub repository doesn't get out of hand.
+ * Uses the same settings as the in-browser optimizer (src/pages/editors/image-optimization.astro),
+ * from src/config/images.ts.
  * @param input The path to the image to format. Must be png or jpg/jpeg.
- * @param targetWidth The max width of the optimized image (default 1280, 2 times the max thumbnail size in an article in DefaultTemplate).
- * @param avifQuality (Default 62).
+ * @param targetWidth The max width of the optimized image.
+ * @param avifQuality 0-100.
  * @param avifEffort 0-9, higher = slower but smaller (default 9).
  */
 async function optimizeImage(
   input: string,
-  targetWidth: number = 1280,
-  avifQuality: number = 62,
+  targetWidth: number = imageOptimization.maxWidth,
+  avifQuality: number = imageOptimization.avifQuality,
   avifEffort: number = 9,
 ): Promise<void> {
   const ext = extname(input).toLowerCase();
-  if (![".jpg", ".jpeg", ".png"].includes(ext)) {
-    console.error(`Unsupported format "${ext}". Provide a .jpg or .png file.`);
+  if (!imageOptimization.inputExtensions.includes(ext)) {
+    console.error(
+      `Unsupported format "${ext}". Provide one of: ${imageOptimization.inputExtensions.join(", ")}.`,
+    );
     process.exit(1);
   }
 
@@ -28,7 +33,9 @@ async function optimizeImage(
   const image = sharp(input, { failOn: "none" });
   const meta = await image.metadata();
 
-  const needsResize = meta.width !== undefined && meta.width > targetWidth;
+  // autoOrient: the dimensions after EXIF rotation (a rotated portrait photo's raw width is its height)
+  const { width, height } = meta.autoOrient;
+  const needsResize = width > targetWidth;
 
   // sharp strips all metadata (EXIF, IPTC, XMP, ICC) by default — GPS, timestamps,
   // camera info, etc. are all removed. .rotate() auto-orients pixels from EXIF first.
@@ -45,11 +52,9 @@ async function optimizeImage(
   const { size: inSize } = await stat(input);
   const pct = ((1 - outSize / inSize) * 100).toFixed(1);
 
-  console.log(`  in:  ${input} (${fmt(inSize)}, ${meta.width}x${meta.height})`);
-  const outWidth = needsResize ? targetWidth : meta.width;
-  const outHeight = needsResize
-    ? Math.round((meta.height ?? 0) * (targetWidth / (meta.width ?? 1)))
-    : meta.height;
+  console.log(`  in:  ${input} (${fmt(inSize)}, ${width}x${height})`);
+  const outWidth = needsResize ? targetWidth : width;
+  const outHeight = needsResize ? Math.round(height * (targetWidth / width)) : height;
   console.log(`  out: ${output} (${fmt(outSize)}, ${outWidth}x${outHeight})`);
   console.log(`  saved ${pct}%`);
 }

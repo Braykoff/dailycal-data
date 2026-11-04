@@ -1,68 +1,68 @@
 ---
 import { Image } from "astro:assets";
-import Seo from "../../components/Seo.astro";
 import PageLayout from "../PageLayout.astro";
 import { Link } from "../../components/Link";
+import { site } from "../../config/site";
+import { type Article, dateFormat, featuredImageAlt } from "../../lib/articles";
 import "../../styles/default-template.css";
 
+interface Props {
+  article: Article;
+}
+
+const { article } = Astro.props;
 const {
-  slug,
   date,
   title,
   byline,
   featuredImage,
   imageAttribution,
   description,
+  keywords,
   subhead,
   hideHeroImage,
   bylineLinks,
   imageCaption,
   aboutStory,
   jointDept,
-} = Astro.props;
+} = article.data;
 
-// Format date
-const dateFormat = new Intl.DateTimeFormat("en-US", {
-  month: "long",
-  day: "numeric",
-  year: "numeric",
-});
+const imageAlt = featuredImageAlt(article);
 
 // Check if is joint-department article
 const isJointDept = typeof jointDept === "string" && jointDept.trim().length > 0;
 
-// Validate byline links
-if (bylineLinks.length !== 0 && bylineLinks.length !== byline.length) {
-  throw new Error(
-    `${slug} has ${byline.length} byline names and ${bylineLinks.length} byline links (these must be the same size)`,
-  );
-}
+// Each author's byline link: their bylineLinks entry if set, otherwise their profile
+const authorLink = (author: string, i: number) => {
+  const link = bylineLinks[i]?.trim();
+  return link ? link : site.authorProfileUrl(author);
+};
 ---
 
-<PageLayout>
-  {/* SEO (in head slot) */}
-  <Seo
-    title={`${title} | The Daily Californian`}
-    description={description}
-    canonical={`https://data.dailycal.org/article/${slug}`}
-    image={featuredImage}
-    pageType="article"
-    authors={byline}
-    publishDate={date}
-    slot="head"
-  />
-
+<PageLayout
+  title={`${title} | ${site.articleTitleSuffix}`}
+  headline={title}
+  description={description ?? subhead}
+  image={featuredImage}
+  imageAlt={imageAlt}
+  type="article"
+  publishedTime={date}
+  authors={byline}
+  keywords={keywords}
+>
   <div class="article">
     <div class="centeredItems">
       {/* Header */}
       <h1 class="title">{title}</h1>
       {subhead && <h3 class="subhead">{subhead}</h3>}
-      <h5 class="date">{dateFormat.format(date)}</h5>
+      <h5 class="date">
+        <time datetime={date.toISOString()}>{dateFormat.format(date)}</time>
+      </h5>
 
       {/* Featured image */}
       {!hideHeroImage && (
         <div class="imageContainer">
-          <Image src={featuredImage} alt="Featured image." class="image" />
+          <Image src={featuredImage} alt={imageAlt} class="image" loading="eager" />
 
           {imageCaption && (
             <div class="imageCaption">
@@ -80,17 +80,7 @@ if (bylineLinks.length !== 0 && bylineLinks.length !== byline.length) {
       <span>By </span>
       {byline.flatMap((author: string, i: number) => [
         ...(i > 0 ? [i === byline.length - 1 ? " & " : ", "] : []),
-        <Link
-          href={
-            bylineLinks.length > 0 &&
-            typeof bylineLinks[i] === "string" &&
-            bylineLinks[i].trim().length > 0
-              ? bylineLinks[i]
-              : `https://www.dailycal.org/users/profile/${author}/` // TODO staff pages
-          }
-        >
-          {author}
-        </Link>,
+        <Link href={authorLink(author, i)}>{author}</Link>,
       ])}
     </div>
 
@@ -114,19 +104,15 @@ if (bylineLinks.length !== 0 && bylineLinks.length !== byline.length) {
 
       {isJointDept ? (
         <p>
-          <Link
-            href="https://www.dailycal.org/site/contact-us.html"
-            style={{ color: "gray", fontSize: "14px" }}
-          >
+          <Link href={site.contactUrl} style={{ color: "gray", fontSize: "14px" }}>
             Contact the Daily Californian
           </Link>
         </p>
       ) : (
         <p>
           Questions, comments or corrections? Email{" "}
-          <Link href="mailto:projects@dailycal.org">projects@dailycal.org</Link>. Code, data and
-          text are open-source on{" "}
-          <Link href="https://github.com/dailycal-projects/dailycalprojects">GitHub</Link>.
+          <Link href={`mailto:${site.contactEmail}`}>{site.contactEmail}</Link>. Code, data and text
+          are open-source on <Link href={site.githubUrl}>GitHub</Link>.
         </p>
       )}
     </div>
@@ -135,7 +121,7 @@ if (bylineLinks.length !== 0 && bylineLinks.length !== byline.length) {
       <h3>Support us</h3>
       <p>
         We are a nonprofit, student-run newsroom. Please consider{" "}
-        <Link href="https://givebutter.com/w68cQv">donating</Link> to support our coverage.
+        <Link href={site.donateUrl}>donating</Link> to support our coverage.
       </p>
     </div>
   </div>
