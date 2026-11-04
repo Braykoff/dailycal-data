@@ -1,10 +1,10 @@
 import eslintConfigPrettier from "eslint-config-prettier";
 import json from "@eslint/json";
 import astro from "eslint-plugin-astro";
-import importPlugin from "eslint-plugin-import";
+import eslintReact from "@eslint-react/eslint-plugin";
+import stylistic from "@stylistic/eslint-plugin";
 import * as mdx from "eslint-plugin-mdx";
 import prettierPlugin from "eslint-plugin-prettier";
-import reactPlugin from "eslint-plugin-react";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
@@ -19,7 +19,7 @@ const logicRules = {
   "no-var": "error",
   eqeqeq: "error",
   "no-unused-vars": ["error", { varsIgnorePattern: "^_", argsIgnorePattern: "^_" }],
-  "import/no-duplicates": "error",
+  "no-duplicate-imports": ["error", { allowSeparateTypeImports: true }],
   "prettier/prettier": "error",
 };
 
@@ -37,10 +37,8 @@ const tsLogicRuleOverrides = {
 };
 
 const reactJsxRules = {
-  "react/jsx-uses-vars": "error",
-  "react/self-closing-comp": "error",
-  "react/jsx-no-useless-fragment": "error",
-  "react/display-name": "off",
+  "@stylistic/jsx-self-closing-comp": "error",
+  "@eslint-react/jsx-no-useless-fragment": "error",
 };
 
 const srcJs = "src/**/*.js";
@@ -72,15 +70,10 @@ export default [
 
   {
     plugins: {
-      import: importPlugin,
       prettier: prettierPlugin,
-      react: reactPlugin,
+      "@eslint-react": eslintReact,
+      "@stylistic": stylistic,
       json,
-    },
-    settings: {
-      react: {
-        version: "detect",
-      },
     },
   },
 
@@ -193,7 +186,6 @@ export default [
       ...reactJsxRules,
       "mdx/remark": "off",
       "no-unused-expressions": "off",
-      "react/react-in-jsx-scope": "off",
     },
   },
 

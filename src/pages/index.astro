@@ -45,24 +45,22 @@ const dateFormat = new Intl.DateTimeFormat("en-US", {
 
     {/* Articles */}
     <div class="index">
-      {
-        articles.map((article) => (
-          <Link href={`/article/${article.id}`} className="articleCardLink">
-            <div class="articleCard">
-              {/* Date */}
-              <div class="date">{dateFormat.format(article.data.date)}</div>
-              {/* Image */}
-              <Image
-                src={article.data.featuredImage}
-                alt="Featured image here"
-                class="featuredImage"
-              />
-              {/* Title */}
-              <div class="title">{article.data.title}</div>
-            </div>
-          </Link>
-        ))
-      }
+      {articles.map((article) => (
+        <Link href={`/article/${article.id}`} className="articleCardLink">
+          <div class="articleCard">
+            {/* Date */}
+            <div class="date">{dateFormat.format(article.data.date)}</div>
+            {/* Image */}
+            <Image
+              src={article.data.featuredImage}
+              alt="Featured image here"
+              class="featuredImage"
+            />
+            {/* Title */}
+            <div class="title">{article.data.title}</div>
+          </div>
+        </Link>
+      ))}
     </div>
   </div>
 </PageLayout>
